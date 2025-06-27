@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New User</title>
+    <style>
+        /* Reuse styles for consistency */
+        body, .form-container, h1, .form-group, label, input, button {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #c5dcf0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px 30px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #00416a;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            color: #333333;
+            margin-bottom: 5px;
+        }
+
+        input{
+            width: 95%;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        button.commit-btn {
+            background-color: #175cb6;
+            color: #ffffff;
+            border: none;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Create New User</h1>
+        <form id="new-user-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter password" required>
+            </div>
+            <div class="form-group">
+                <label for="alt-password">Alternate Password</label>
+                <input type="password" id="alt-password" name="alt-password" placeholder="Enter alternate password" required>
+            </div>
+            <div class="form-group">
+                <label for="user-type">User  Type</label>
+                <select id="user-type" name="user-type" required>
+                    <option value="" disabled selected>Select user type</option>
+                    <option value="Doctor">Doctor</option>
+                    <option value="Patient">Patient</option>
+                    <option value="Receptionist">Receptionist</option>
+                    <option value="Pharmacist">Pharmacist</option>
+                </select>
+            </div>
+            <button type="submit" class="commit-btn">Commit</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('new-user-form').addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevent traditional form submission
+
+            const formData = new URLSearchParams(new FormData(event.target));
+
+            try {
+                const response = await fetch('/new_user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: formData,
+                });
+
+                const result = await response.json();
+
+                // Show success or error message in a dialog box
+                if (response.ok) {
+                    alert(result.message); // Success message
+                } else {
+                    alert(result.error); // Error message
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again later.');
+            }
+        });
+    </script>
+</body>
+</html>

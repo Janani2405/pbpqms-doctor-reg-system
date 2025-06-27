@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authenticity Form</title>
+    <style>
+        body {
+            background-image: url('/static/background.jpg'); /* Replace with your image path */
+            background-size: cover; /* Ensures the image covers the entire page */
+            background-repeat: no-repeat; /* Prevents repeating */
+            background-position: center; /* Centers the image */
+
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+
+            touch-action: none; /* Disable all touch gestures */
+        overflow: hidden; /* Prevent scrolling if swiping triggers it */
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px 30px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #00416a;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            color: #333333;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        input:focus {
+            border-color: #00416a;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 65, 106, 0.3);
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .new-user-section {
+            text-align: left;
+            margin-top: 15px;
+        }
+
+        .new-user-section p {
+            margin: 0 0 10px;
+            font-size: 14px;
+            color: #333333;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            width: 150px;
+            height: 35px;
+        }
+
+        button.submit-btn {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        button.change-password-btn {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        button.create-new-user-btn {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+        form {
+            touch-action: manipulation; /* Disable pinch/zoom or swipe interactions */
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Authenticity Form for PBPQMS</h1>
+        <form id="authenticity-form" action="/" method="POST">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <div class="button-group">
+                <button type="submit" class="submit-btn">Submit</button>
+                <button type="button" class="change-password-btn" onclick="window.location.href='/change_pwd'">Change Password</button>
+            </div>
+            <div class="new-user-section">
+                <p>If you're a new user,</p>
+                <button type="button" class="create-new-user-btn" onclick="window.location.href='/new_user'">Create New User</button>
+            </div>
+        </form>
+        
+    </div>
+
+    <script>
+        document.getElementById('authenticity-form').addEventListener('submit', async (event) => {
+    event.preventDefault(); // Prevent traditional form submission
+
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    try {
+        const response = await fetch('/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                username: username,
+                password: password,
+            }),
+        });
+
+        if (response.redirected) {
+            // If the server sends a redirect, navigate to the new page
+            window.location.href = response.url;
+        } else {
+            const result = await response.json();
+            alert(result.error); // Show error message
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again later.');
+    }
+});
+
+
+
+
+
+document.getElementById('authenticity-form').addEventListener('submit', async (event) => {
+    event.preventDefault(); // Prevent traditional form submission
+
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
+
+    if (!username || !password) {
+        alert('Please fill in both username and password.');
+        return;
+    }
+
+    try {
+        const response = await fetch('/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                username: username,
+                password: password,
+            }),
+        });
+
+        if (response.redirected) {
+            // If the server sends a redirect, navigate to the new page
+            window.location.href = response.url;
+        } else {
+            const result = await response.json();
+            alert(result.error); // Show error message
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again later.');
+    }
+});
+
+
+document.addEventListener('touchstart', handleTouchStart, false);
+document.addEventListener('touchmove', handleTouchMove, false);
+
+let xDown = null;
+let yDown = null;
+
+function handleTouchStart(event) {
+    const firstTouch = event.touches[0];
+    xDown = firstTouch.clientX;
+    yDown = firstTouch.clientY;
+}
+
+function handleTouchMove(event) {
+    if (!xDown || !yDown) {
+        return;
+    }
+
+    const xUp = event.touches[0].clientX;
+    const yUp = event.touches[0].clientY;
+
+    const xDiff = xDown - xUp;
+    const yDiff = yDown - yUp;
+
+    if (Math.abs(xDiff) > Math.abs(yDiff)) {
+        // Horizontal swipe detected
+        event.preventDefault(); // Prevent swipe navigation
+    }
+
+    // Reset values
+    xDown = null;
+    yDown = null;
+}
+
+    </script>
+    
+    
+</body>
+</html>

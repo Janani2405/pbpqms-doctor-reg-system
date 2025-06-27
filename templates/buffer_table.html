@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buffer Table</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #3a99d8;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    <h1>Buffer Table Records</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Doctor ID</th>
+                <th>Name</th>
+                <th>Qualification</th>
+                <th>Specialization</th>
+                <th>Channel Fee</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Room No</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+            <tr>
+                <td>{{ record.doctor_id }}</td>
+                <td>{{ record.doctor_name }}</td>
+                <td>{{ record.qualification }}</td>
+                <td>{{ record.specialization }}</td>
+                <td>{{ record.channel_fee }}</td>
+                <td>{{ record.age }}</td>
+                <td>{{ record.gender }}</td>
+                <td>{{ record.room_no }}</td>
+                
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

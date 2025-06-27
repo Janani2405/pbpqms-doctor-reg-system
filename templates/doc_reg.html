@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Registration Form</title>
+    <style>
+        /* General Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-image: url('/static/male.png'), url('/static/female.png');
+            background-position: -5% 10%, 110% 5%; /* Position the images on the left and right sides */
+            background-size: 30% 100%, 30% 100%; /* Adjust the size of the images (25% width and 100% height) */
+            background-repeat: no-repeat, no-repeat; /* Prevent repeating the background images */
+        
+            font-family: Arial, sans-serif;
+            background-color: #eaf4fc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+
+            touch-action: none; /* Disable all touch gestures */
+        overflow: hidden; /* Prevent scrolling if swiping triggers it */
+        }
+
+        /* Form Container */
+        .form-container {
+            width: 950px;
+            max-width: 1000px;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            border-top: 5px solid #3a99d8;
+        }
+
+        /* Form Heading */
+        .form-container h2 {
+            text-align: center;
+            color: #3a99d8;
+            font-size: 28px;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        /* Form Table */
+        .form-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .form-table td {
+            padding: 10px;
+            vertical-align: middle;
+        }
+
+        .form-table label {
+            font-weight: bold;
+            color: #333;
+            display: block;
+            text-align: left;
+        }
+
+        .form-table input, .form-table select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        /* Gender Container */
+        .gender-container {
+            display: flex;
+            align-items: left;
+            gap: 20px;/* Space between each radio button-label pair */
+        }
+
+        .gender-container input {
+            margin: 0; /* Remove browser's default margin for radio buttons */
+        }
+
+        .gender-container label {
+            margin: 0; /* Ensure no extra margin on the labels */
+            padding: 0; /* Remove any padding, if inherited */
+        }
+
+        /* Room Number Spinner Alignment */
+        .room-number-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .room-number-container input {
+            text-align: center;
+            padding: 5px 10px;
+        }
+
+        .room-number-container button {
+            padding: 5px 15px;
+            background-color: #3a99d8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .room-number-container button:hover {
+            background-color: #318ac6;
+        }
+
+        /* Buttons Container */
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .button {
+            padding: 12px 20px;
+            background-color: #3a99d8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-align: center;
+            flex: 1;
+            max-width: 120px;
+        }
+
+        .button:hover {
+            background-color: #318ac6;
+        }
+
+        /* Form Footer Text */
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        input[type="radio"],
+        label {
+            margin: 0;
+            padding: 0;
+            line-height: 1;
+            font-size: inherit;
+        }
+        
+        form {
+            touch-action: manipulation; /* Disable pinch/zoom or swipe interactions */
+        }
+
+
+
+    </style>
+</head>
+<body>
+    
+<div class="form-container">
+    <h2>Doctor Registration</h2>
+    <form id="doctor-form" method="POST" action="/doc_reg">
+        <table class="form-table">
+            <tr>
+                <td><label for="doctor-id">Doctor ID</label></td>
+                <td>
+                    <input 
+                        type="text" 
+                        id="doctor-id" 
+                        name="doctor-id" 
+                        placeholder="Enter Doctor ID" 
+                        required 
+                        list="doctor-id-list" 
+                        style="width: 85%; padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 5px;">
+                    <datalist id="doctor-id-list"></datalist>
+                    <button 
+                        type="button" 
+                        onclick="fetchRecord()" 
+                        style="
+                            margin-left: 10px; 
+                            padding: 8px 15px; 
+                            background-color: #3a99d8; 
+                            color: white; 
+                            border: none; 
+                            border-radius: 5px; 
+                            font-size: 14px; 
+                            cursor: pointer; 
+                            transition: background-color 0.3s ease;" 
+                        onmouseover="this.style.backgroundColor='#318ac6'" 
+                        onmouseout="this.style.backgroundColor='#3a99d8'">
+                        Fetch
+                    </button>
+                </td>
+                
+            </tr>            
+            <tr>
+                <td><label for="doctor-name">Doctor Name</label></td>
+                <td>
+                    <input type="text" id="doctor-name" name="doctor-name" placeholder="Enter Doctor Name" required list="doctor-name-list">
+                    <datalist id="doctor-name-list"></datalist>
+                </td>            
+            </tr>
+            <tr>
+                <td><label for="qualification">Qualification</label></td>
+                <td>
+                    <input type="text" id="qualification" name="qualification" placeholder="Enter Qualification" required list="qualification-list">
+                    <datalist id="qualification-list"></datalist>
+                </td>            
+            </tr>
+            <tr>
+                <td><label for="specialization">Specialization</label></td>
+                <td>
+                    <input type="text" id="specialization" name="specialization" placeholder="Enter Specialization" required list="specialization-list">
+                    <datalist id="specialization-list"></datalist>
+                </td>
+                        
+            </tr>
+            <tr>
+                <td><label for="channel-fee">Channel Fee</label></td>
+                <td><input type="number" id="channel-fee" name="channel-fee" placeholder="Enter Channel Fee" required></td>
+            </tr>
+            <tr>
+                <td><label for="age">Age</label></td>
+                <td><input type="number" id="age" name="age" placeholder="Enter Age" required></td>
+            </tr>
+            <tr>
+                <td><label for="gender">Gender</label></td>
+                <td>
+                    <div style="display: inline-flex; align-items: center; gap: 10px; font-size: 14px;">
+                        <input type="radio" id="male" name="gender" value="Male" style="margin: 0; padding: 0;"><label for="male" style="margin: 0; padding: 0;">Male</label>
+                        <input type="radio" id="female" name="gender" value="Female" style="margin: 0; padding: 0;"><label for="female" style="margin: 0; padding: 0;">Female</label>
+                    </div>
+                </td>
+            </tr>
+            
+            <tr>
+                <td><label for="room-no">Room No</label></td>
+                <td>
+                    <div class="room-number-container">
+                        <button type="button" onclick="adjustRoomNumber(-1)">-</button>
+                        <input type="number" id="room-no" name="room-no" placeholder="Room No" min="1" step="1" value="1" required>
+                        <button type="button" onclick="adjustRoomNumber(1)">+</button>
+                    </div>
+                </td>
+            </tr>
+            <tr id="update-field-row" style="display: none;">
+                <td><label for="update-field">Field to Update</label></td>
+                <td>
+                    <select id="update-field" onchange="enableSelectedField()" disabled>
+                        <option value="" disabled selected>Select a field to update</option>
+                        <option value="doctor-name">Doctor Name</option>
+                        <option value="qualification">Qualification</option>
+                        <option value="specialization">Specialization</option>
+                        <option value="channel-fee">Channel Fee</option>
+                        <option value="age">Age</option>
+                        <option value="gender">Gender</option>
+                        <option value="room-no">Room No</option>
+                    </select>
+                </td>
+            </tr>
+            
+        </table>
+
+        <!-- Buttons Container -->
+        <div class="buttons-container">
+            <button type="button" class="button" onclick="previousRecord()">Previous</button>
+            <button type="button" class="button" onclick="insertRecord()">Insert</button>
+            <button type="button" class="button" onclick="clearForm()">Clear</button>
+            <button type="button" class="button" onclick="updateRecord()">Update</button>
+            <button type="button" class="button" onclick="saveBuffer()">Save</button>
+            <button type="button" class="button" onclick="commitBuffer()">Commit</button>
+            <button type="button" class="button" onclick="deleteRecord()">Delete</button>
+            <button type="button" class="button" onclick="nextRecord()">Next</button>
+        </div>
+      <!--  <div style="text-align: center; margin-top: 20px;"> 
+            <a href="/view_buffer" style="text-decoration: none; color: white; background-color: #3a99d8; padding: 10px 20px; border-radius: 5px;">View Buffer Table</a>
+        </div> -->
+        
+    </form>
+    <div class="form-footer">
+        <p>All fields are required for doctor registration.</p>
+    </div>
+</div>
+
+<script>
+    function adjustRoomNumber(change) {
+        const roomInput = document.getElementById('room-no');
+        const currentValue = parseInt(roomInput.value) || 1;
+        roomInput.value = Math.max(1, currentValue + change);
+    }
+</script>
+<script>
+    /*function saveBuffer() {
+        const formData = new FormData(document.getElementById('doctor-form'));
+        formData.append('action', 'Save');
+
+        sendRequest(formData, (response) => {
+            alert(response.message || response.error);
+            disableFields();
+        });
+    }*/
+
+    function saveBuffer() {
+    const doctorIdField = document.getElementById('doctor-id');
+    if (!doctorIdField.value.trim()) {
+        alert('Doctor ID is required to save changes.');
+        return;
+    }
+
+    // Find all enabled fields
+    const inputs = document.querySelectorAll('#doctor-form input, #doctor-form select');
+    const enabledFields = Array.from(inputs).filter(input => !input.disabled);
+
+    if (enabledFields.length === 2 && enabledFields.some(input => input.id === 'doctor-id')) {
+        // Exactly one additional field is enabled along with Doctor ID
+        const additionalField = enabledFields.find(input => input.id !== 'doctor-id');
+
+        // Save operation for this specific case
+        const formData = new FormData();
+        formData.append('action', 'SaveSingleField');
+        formData.append('doctor-id', doctorIdField.value.trim());
+        formData.append(additionalField.name, additionalField.value);
+
+        sendRequest(formData, (response) => {
+            alert(response.message || response.error);
+            if (!response.error) disableFields(); // Disable fields after successful save
+        });
+    } else {
+        // Proceed with the existing save behavior
+        const formData = new FormData(document.getElementById('doctor-form'));
+        formData.append('action', 'Save');
+
+        sendRequest(formData, (response) => {
+            alert(response.message || response.error);
+            if (!response.error) disableFields(); // Disable fields after successful save
+        });
+    }
+}
+
+
+    function commitBuffer() {
+        const formData = new FormData(document.getElementById('doctor-form'));
+        formData.append('action', 'Commit');
+
+        sendRequest(formData, (response) => {
+            alert(response.message || response.error);
+            if (!response.error) {
+            disableFields(); // Disable fields only if commit is successful
+        }
+
+        });
+    }
+
+    function deleteRecord() {
+        const formData = new FormData(document.getElementById('doctor-form'));
+        formData.append('action', 'Delete');
+
+        sendRequest(formData, (response) => {
+            alert(response.message || response.error);
+            if (response.message) clearForm();
+        });
+    }
+
+    function disableForm() {
+        document.querySelectorAll('#doctor-form input').forEach(input => input.disabled = true);
+    }
+
+    /*function clearForm() {
+        document.getElementById('doctor-form').reset();
+        enableFields()
+    }*/
+
+    function clearForm() {
+        // Get all input fields in the form
+        const form = document.getElementById('doctor-form');
+        const inputs = form.querySelectorAll('input, select');
+
+        // Iterate through each input field and clear its value except for Doctor ID
+        inputs.forEach(input => {
+            if (input.id !== 'doctor-id') {
+                if (input.type === 'radio') {
+                    input.checked = false; // Uncheck radio buttons
+                } else if (input.type === 'number' || input.type === 'text') {
+                    input.value = ''; // Clear text and number fields
+                }
+            }
+        });
+
+        // Re-enable fields if necessary
+        enableFields();
+    }
+
+    async function sendRequest(formData, callback) {
+        try {
+            const response = await fetch('/doc_reg', { method: 'POST', body: formData });
+            const result = await response.json();
+            callback(result);
+        } catch (error) {
+            alert('An error occurred.');
+        }
+    }
+
+
+
+
+
+
+
+
+    function previousRecord() {
+    const doctorId = document.getElementById('doctor-id').value;
+    if (!doctorId) {
+        alert('Please enter a valid Doctor ID.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('action', 'Previous');
+    formData.append('doctor-id', doctorId);
+
+    sendRequest(formData, (response) => {
+        if (response.error) {
+            alert(response.error);
+        } else {
+            populateForm(response);
+            disableFields(); // Disable input fields after displaying the record
+        }
+    });
+}
+
+function nextRecord() {
+    const doctorId = document.getElementById('doctor-id').value;
+    if (!doctorId) {
+        alert('Please enter a valid Doctor ID.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('action', 'Next');
+    formData.append('doctor-id', doctorId);
+
+    sendRequest(formData, (response) => {
+        if (response.error) {
+            alert(response.error);
+        } else {
+            populateForm(response);
+            disableFields(); // Disable input fields after displaying the record
+        }
+    });
+}
+
+function populateForm(data) {
+    document.getElementById('doctor-id').value = data.doctor_id || '';
+    document.getElementById('doctor-name').value = data.doctor_name || '';
+    document.getElementById('qualification').value = data.qualification || '';
+    document.getElementById('specialization').value = data.specialization || '';
+    document.getElementById('channel-fee').value = data.channel_fee || '';
+    document.getElementById('age').value = data.age || '';
+    document.querySelector(`input[name="gender"][value="${data.gender || ''}"]`).checked = true;
+    document.getElementById('room-no').value = data.room_no || '';
+}
+
+/*function disableFields() {
+    const inputs = document.querySelectorAll('#doctor-form input, #doctor-form select');
+    inputs.forEach(input => {
+        input.disabled = true; // Disable all fields
+    });
+    document.getElementById('doctor-id').disabled = false; // Re-enable Doctor ID
+}*/
+
+function disableFields(){
+    const inputs = document.querySelectorAll('#doctor-form input:not(#doctor-id), #doctor-form select');
+inputs.forEach(input => {
+    input.disabled = true; // Disable all except #doctor-id
+});
+
+}
+
+
+
+
+
+
+/*function insertRecord() {
+    const doctorId = document.getElementById('doctor-id').value;
+    if (!doctorId) {
+        alert('Please enter a valid Doctor ID.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('action', 'Insert');
+    formData.append('doctor-id', doctorId);
+
+    sendRequest(formData, (response) => {
+        if (response.error) {
+            alert(response.error);
+        } else {
+            enableFields(); // Enable all fields for updating
+            alert(response.message);
+        }
+    });
+}*/
+
+function insertRecord() {
+    // Clear all fields except Doctor ID
+    const form = document.getElementById('doctor-form');
+    const inputs = form.querySelectorAll('input, select');
+
+    inputs.forEach(input => {
+        if (input.id !== 'doctor-id') {
+            if (input.type === 'radio') {
+                input.checked = false; // Uncheck radio buttons
+            } else {
+                input.value = ''; // Clear other fields
+            }
+        }
+    });
+
+    // Fetch the highest Doctor ID and generate the next one
+    fetch('/fetch_highest_doctor_id')
+        .then(response => response.json())
+        .then(result => {
+            if (result.highest_id) {
+                const newDoctorId = incrementDoctorIdValue(result.highest_id);
+                document.getElementById('doctor-id').value = newDoctorId;
+                alert('Ready to insert new record.');
+                clearForm();
+            } else {
+                alert('Failed to generate Doctor ID.');
+            }
+        })
+        .catch(error => {
+            console.error('Error generating Doctor ID:', error);
+            alert('An error occurred while generating Doctor ID.');
+        });
+}
+
+function enableFields() {
+    const inputs = document.querySelectorAll('#doctor-form input, #doctor-form select');
+    inputs.forEach(input => input.disabled = false);
+}
+
+
+
+
+
+
+
+/*function updateRecord() {
+    const doctorId = document.getElementById('doctor-id').value.trim();
+    if (!doctorId) {
+        alert('Please enter a valid Doctor ID.');
+        return;
+    }
+
+    const formData = new FormData(document.getElementById('doctor-form'));
+    formData.append('action', 'Update');
+    formData.append('doctor-id', doctorId);
+
+    sendRequest(formData, (response) => {
+        console.log("Received response:", response); // Log the backend response
+        if (response.error) {
+            alert(response.error);
+        } else if (response.isCommitted) {
+            alert('Committed records cannot be updated.');
+            disableFields(); // Keep fields disabled for committed records
+        } else {
+            alert('Record is not committed. Click on a field to enable it for editing.');
+            enableFields(); // Attach click events dynamically
+        }
+    });
+}*/
+async function updateRecord() {
+    const doctorId = document.getElementById('doctor-id').value.trim();
+    if (!doctorId) {
+        alert('Please enter a valid Doctor ID.');
+        return;
+    }
+
+    try {
+        // Check if the record is committed
+        const response = await fetch('/doc_reg', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                'action': 'Update',
+                'doctor-id': doctorId
+            }),
+        });
+
+        const result = await response.json();
+
+        if (result.error) {
+            alert(result.error);
+            return;
+        }
+
+        if (result.isCommitted) {
+            alert('Committed records cannot be updated.');
+            return;
+        }
+
+        // Show the dropdown to select a field for updating
+        document.getElementById('update-field-row').style.display = 'table-row';
+        document.getElementById('update-field').disabled = false;
+    } catch (error) {
+        alert('An error occurred while checking the record status.');
+    }
+}
+
+function enableSelectedField() {
+    const selectedField = document.getElementById('update-field').value;
+
+    // Disable all fields initially
+    const inputs = document.querySelectorAll('#doctor-form input, #doctor-form select');
+    inputs.forEach(input => input.disabled = true);
+
+    // Enable only the selected field
+    if (selectedField) {
+        document.getElementById(selectedField).disabled = false;
+    }
+    document.getElementById('doctor-id').disabled = false; // Always keep Doctor ID enabled
+
+    // Hide the dropdown menu for field selection
+    document.getElementById('update-field-row').style.display = 'none';
+}
+
+
+
+
+
+
+
+
+function logFieldStates() {
+    const inputs = document.querySelectorAll('#doctor-form input, #doctor-form select');
+    inputs.forEach(input => {
+        console.log(`Field: ${input.name || 'field'}, Disabled: ${input.disabled}`);
+    });
+}
+
+// Call `logFieldStates` after attaching click events
+function enableFieldOnClick() {
+    console.log("Attaching click events...");
+    const inputs = document.querySelectorAll('#doctor-form input, #doctor-form select');
+
+    inputs.forEach(input => {
+        input.addEventListener('click', () => {
+            if (input.disabled) {
+                input.disabled = false;
+                alert(`You can now edit ${input.name || 'this field'}.`);
+            }
+        });
+    });
+
+
+    logFieldStates(); // Log field states for debugging
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    console.log("DOM fully loaded. Initializing...");
+    disableFields(); // Disable all fields initially
+});
+
+
+
+
+
+    // Attach focus events for all fields
+    document.getElementById('doctor-id').addEventListener('focus', () => fetchOptions('doctor-id', 'doctor_id'));
+    document.getElementById('qualification').addEventListener('focus', () => fetchOptions('qualification', 'qualification'));
+    document.getElementById('specialization').addEventListener('focus', () => fetchOptions('specialization', 'specialization'));
+    document.getElementById('doctor-name').addEventListener('focus', () => fetchOptions('doctor-name', 'doctor_name'));
+
+    async function fetchOptions(fieldId, fieldName) {
+        try {
+            const response = await fetch(`/fetch_options?field=${fieldName}`);
+            if (!response.ok) throw new Error("Failed to fetch options");
+            const options = await response.json();
+
+            // Remove duplicates and clear old options
+            const uniqueOptions = [...new Set(options)];
+            const datalist = document.getElementById(`${fieldId}-list`);
+            datalist.innerHTML = '';
+
+            // Populate the datalist
+            uniqueOptions.forEach(option => {
+                const opt = document.createElement('option');
+                opt.value = option;
+                datalist.appendChild(opt);
+            });
+        } catch (error) {
+            console.error("Error fetching options:", error);
+        }
+    }
+
+
+
+    async function fetchRecord() {
+    const doctorId = document.getElementById('doctor-id').value.trim();
+    if (!doctorId) {
+        alert('Please enter a valid Doctor ID.');
+        return;
+    }
+
+    try {
+        const response = await fetch('/doc_reg', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                'action': 'Fetch',
+                'doctor-id': doctorId
+            }),
+        });
+
+        const result = await response.json();
+
+        if (result.error) {
+            alert(result.error);
+        } else {
+            populateForm(result);
+            disableFields(); // Disable input fields after displaying the record
+        }
+    } catch (error) {
+        alert('An error occurred while fetching the record.');
+    }
+}
+
+
+
+
+
+
+document.addEventListener('touchstart', handleTouchStart, false);
+document.addEventListener('touchmove', handleTouchMove, false);
+
+let xDown = null;
+let yDown = null;
+
+function handleTouchStart(event) {
+    const firstTouch = event.touches[0];
+    xDown = firstTouch.clientX;
+    yDown = firstTouch.clientY;
+}
+
+function handleTouchMove(event) {
+    if (!xDown || !yDown) {
+        return;
+    }
+
+    const xUp = event.touches[0].clientX;
+    const yUp = event.touches[0].clientY;
+
+    const xDiff = xDown - xUp;
+    const yDiff = yDown - yUp;
+
+    if (Math.abs(xDiff) > Math.abs(yDiff)) {
+        // Horizontal swipe detected
+        event.preventDefault(); // Prevent swipe navigation
+    }
+
+    // Reset values
+    xDown = null;
+    yDown = null;
+}
+
+</script>
+<script>
+    let currentDoctorId = "D001"; // Starting ID
+
+    // Function to fetch the current highest ID from the backend (optional)
+    async function initializeDoctorId() {
+        try {
+            const response = await fetch('/fetch_highest_doctor_id'); // Add a route in Flask to return max(doctor_id)
+            const result = await response.json();
+            if (result.highest_id) {
+                currentDoctorId = incrementDoctorIdValue(result.highest_id); // Generate the next ID
+            }
+        } catch (error) {
+            console.error("Error fetching highest Doctor ID:", error);
+        }
+
+        // Populate the Doctor ID field
+        document.getElementById('doctor-id').value = currentDoctorId;
+    }
+
+    // Function to increment the Doctor ID value
+    function incrementDoctorIdValue(doctorId) {
+        // Extract the numeric part of the ID
+        const prefix = doctorId.slice(0, 1); // Assuming the prefix is 'D'
+        const numericPart = parseInt(doctorId.slice(1), 10); // Extract the numeric part and convert to number
+        const nextNumericPart = numericPart + 1; // Increment the numeric part
+
+        // Pad the numeric part to maintain 3 digits
+        const paddedNumericPart = String(nextNumericPart).padStart(3, '0');
+
+        // Return the next ID with the prefix
+        return `${prefix}${paddedNumericPart}`;
+    }
+
+    // Increment the Doctor ID after successful submission
+    function incrementDoctorId() {
+        currentDoctorId = incrementDoctorIdValue(currentDoctorId); // Generate the next ID
+        document.getElementById('doctor-id').value = currentDoctorId; // Update the field
+    }
+
+    // Call initializeDoctorId on page load
+    //document.addEventListener('DOMContentLoaded', initializeDoctorId);
+
+    // Attach the incrementDoctorId function to the form's submission process
+    document.getElementById('doctor-form').addEventListener('submit', (event) => {
+        event.preventDefault(); // Prevent actual submission for this example
+        alert('Form submitted! Current Doctor ID: ' + currentDoctorId); // Show current ID
+        incrementDoctorId(); // Increment the ID for the next entry
+    });
+</script>
+
+</body>
+</html>

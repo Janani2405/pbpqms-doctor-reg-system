@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Records</title>
+    <style>
+        /* Add styles to format the table nicely */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <h1>Doctor Records</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Doctor ID</th>
+                <th>Name</th>
+                <th>Qualification</th>
+                <th>Specialization</th>
+                <th>Channel Fee</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Room No</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+            <tr>
+                <td>{{ record.doctor_id }}</td>
+                <td>{{ record.doctor_name }}</td>
+                <td>{{ record.qualification }}</td>
+                <td>{{ record.specialization }}</td>
+                <td>{{ record.channel_fee }}</td>
+                <td>{{ record.age }}</td>
+                <td>{{ record.gender }}</td>
+                <td>{{ record.room_no }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

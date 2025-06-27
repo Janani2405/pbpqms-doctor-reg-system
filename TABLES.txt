@@ -1,0 +1,29 @@
+CREATE TABLE Doctors (
+    doctor_id VARCHAR2(50) PRIMARY KEY,
+    doctor_name VARCHAR2(100),
+    qualification VARCHAR2(100),
+    specialization VARCHAR2(100),
+    channel_fee NUMBER(10, 2),
+    age NUMBER(3),
+    gender VARCHAR2(10),
+    room_no NUMBER(5)
+);
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON Doctors TO system;
+
+
+SELECT * FROM Doctors;
+
+
+-- Buffer Table
+CREATE TABLE Buffer (
+    doctor_id VARCHAR2(50) PRIMARY KEY,
+    doctor_name VARCHAR2(100),
+    qualification VARCHAR2(100),
+    specialization VARCHAR2(100),
+    channel_fee NUMBER(10, 2),
+    age NUMBER(3),
+    gender VARCHAR2(10),
+    room_no NUMBER(5),
+    is_committed NUMBER(1) DEFAULT 0
+);
