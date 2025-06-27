@@ -1,0 +1,29 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Environment variables
+.env
+
+# Oracle DB files or backups
+*.db
+*.sqlite3
+*.dmp
+*.log
+
+# Virtual environments
+venv/
+ENV/
+env/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDE/workspace files
+.vscode/
+.idea/
+
+# OS metadata
+*.swp
